@@ -20,12 +20,11 @@ const CharacterDetailsPage = ({ params }: CharacterDetailsPageProps) => {
   const fetchCharacterDetail = useCallback(async () => {
     try {
       const { results } = await getCharactersById(id);
-      console.log(results)
       setCharacter(results);
     } catch (e) {
       setError("Erro ao carregar od heróis");
     }
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     fetchCharacterDetail();
