@@ -8,7 +8,7 @@ interface CardProps {
   onClick: (id: number) => void;
 }
 
-const Card = ({ character, onClick }: CardProps) => {
+export const Card = ({ character, onClick }: CardProps) => {
   return (
     <div className="w-min bg-base-200 bg-neutral-50">
       <figure className="h-[200px] w-[200px]">
@@ -34,5 +34,3 @@ const Card = ({ character, onClick }: CardProps) => {
     </div>
   );
 };
-
-export default Card;

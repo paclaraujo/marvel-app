@@ -2,15 +2,15 @@
 
 import { useEffect, useState, useCallback } from "react";
 
-import Card from "@/components/Card/Card";
-import Header from "@/components/Header/Header";
+import { Card } from "@/components/Card";
+import { Header } from "@/components/Header";
 import Image from "next/image";
 
 import { Character } from "@/types/characters";
 
 import { getCharacters } from "@/lib/api";
 import { IconHeartFilled, IconSearch } from "@tabler/icons-react";
-import Footer from "@/components/Footer/Footer";
+import { Footer }  from "@/components/Footer";
 
 const HomePage = () => {
   const [characters, setCharacters] = useState<Character[]>([]);

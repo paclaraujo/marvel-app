@@ -1,7 +1,7 @@
 
 import Image from "next/image";
 
-const Header = () => {
+export const Header = () => {
   return (
     <div className="flex flex-col justify-center items-center p-6">
       <figure>
@@ -17,5 +17,3 @@ const Header = () => {
     </div>
   );
 };
-
-export default Header;
