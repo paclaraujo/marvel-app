@@ -1,23 +1,23 @@
 import md5 from "md5";
 import axios from "axios";
 import {
-  CharacterApiResponse,
-  CharacterComicsApiResponse,
+  Characters,
+  CharacterComic,
+  Comics,
 } from "@/types/characters";
 
 const MARVEL_BASE_API_URL = process.env.NEXT_PUBLIC_MARVEL_BASE_API_URL;
-const MARVEL_PUBLIC_API_KEY= process.env.NEXT_PUBLIC_MARVEL_PUBLIC_API_KEY
-const MARVEL_PRIVATE_API_KEY= process.env.NEXT_PUBLIC_MARVEL_PRIVATE_API_KEY
+const MARVEL_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_MARVEL_PUBLIC_API_KEY;
+const MARVEL_PRIVATE_API_KEY = process.env.NEXT_PUBLIC_MARVEL_PRIVATE_API_KEY;
 
-const getTimestamp = () => Date.now().toString();
+const getTimestamp = () :string => Date.now().toString();
 const getHash = (timeStamp: string) =>
-  md5(`${timeStamp}${ MARVEL_PRIVATE_API_KEY}${MARVEL_PUBLIC_API_KEY}`);
+  md5(`${timeStamp}${MARVEL_PRIVATE_API_KEY}${MARVEL_PUBLIC_API_KEY}`);
 
 const hash = getHash(getTimestamp());
-
 const query = `ts=${getTimestamp()}&apikey=${MARVEL_PUBLIC_API_KEY}&hash=${hash}`;
 
-export const getCharacters = async (): Promise<CharacterApiResponse> => {
+export const getCharacters = async (): Promise<Characters> => {
   const {
     data: { data },
   } = await axios.get(
@@ -29,24 +29,15 @@ export const getCharacters = async (): Promise<CharacterApiResponse> => {
 
 export const getCharactersById = async (
   id: string
-): Promise<CharacterApiResponse> => {
+): Promise<Characters> => {
   const {
     data: { data },
   } = await axios.get(`${MARVEL_BASE_API_URL}/characters/${id}?${query}`);
 
-  return data;
+  const comics = await Promise.all(
+    data.results[0].comics.items.map((item: CharacterComic) => axios.get(`${item.resourceURI}?${query}`)
+    )
+  ) as unknown as Comics;
+
+  return { ...data, comics: { results: comics.data.data.results } };
 };
-
-export const getCharactersComicByCharacterId = async (
-  id: string
-): Promise<CharacterComicsApiResponse> => {
-  const {
-    data: { data },
-  } = await axios.get(
-    `${MARVEL_BASE_API_URL}/characters/${id}/comics?${query}`
-  );
-
-  return data;
-};
-
-getCharacters();

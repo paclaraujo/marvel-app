@@ -8,68 +8,24 @@ import Image from "next/image";
 
 import { Character } from "@/types/characters";
 
-import { getCharacters } from "@/lib/api";
-import { IconHeartFilled, IconSearch } from "@tabler/icons-react";
-import { Footer }  from "@/components/Footer";
+import { IconHeartFilled, IconSearch, IconX } from "@tabler/icons-react";
+import { Loader } from "@/components/Loader";
+import { useCharactersController } from "@/hooks/useCharactersController";
 
 const HomePage = () => {
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [initialCharacters, setInitialCharacters] = useState<Character[]>([]);
-  const [error, setError] = useState("");
-
-  const fetchCharacters = useCallback(async () => {
-    try {
-      const { results } = await getCharacters();
-      setCharacters(results);
-      setInitialCharacters(results);
-    } catch (e) {
-      setError("Erro ao carregar od heróis");
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchCharacters();
-  }, [fetchCharacters]);
-
-  const handleFilterByName = (searchName: string) => {
-    const filteredByName = searchName
-      ? initialCharacters.filter((character) =>
-          character.name.toLowerCase().includes(searchName.toLowerCase())
-        )
-      : initialCharacters;
-
-    setCharacters(filteredByName);
-  };
-
-  const handleOrderByName = (order: string) => {
-    const sortedCharacters = [...characters].sort((a, b) =>
-      order === "a-z"
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name)
-    );
-    setCharacters(sortedCharacters);
-  };
-
-  const handleToggleFavorite = (id: number) => {
-    const canFavorite = characters.filter((char) => char.favorite);
-
-    if (canFavorite.length < 5) {
-      const updateCharacters = characters.map((character) =>
-        character.id === id ? { ...character, favorite: true } : character
-      );
-      setCharacters(updateCharacters);
-    } else {
-      setError("Você só pode favoritar 5 heróis");
-    }
-  };
-
-  const handleShowOnlyFavorites = () => {
-    const favorites = characters.filter((character) => character.favorite);
-    setCharacters(favorites);
-  };
+  const {
+    characters,
+    error,
+    isLoading,
+    handleFilterByName,
+    handleOrderByName,
+    handleToggleFavorite,
+    handleShowOnlyFavorites,
+    setError
+  } = useCharactersController();
 
   return (
-    <main className="container px-6 flex flex-col items-center">
+    <main className="container px-8 flex flex-col items-center">
       <Header />
       <div className="flex gap-6 bg-red-50 w-full md:w-[65dvw] rounded-full py-3 px-4 border border-red-100 placeholder:text-red-300">
         <IconSearch className="text-red-400" />
@@ -86,9 +42,14 @@ const HomePage = () => {
         <p className="text-neutral-400">
           Encontrados {characters.length} heróis
         </p>
-        <div className="flex flex-col md:flex-row gap-4 items-center">
+        <div className="flex flex-col md:flex-row gap-4 md:items-center items-start w-full ml-4">
           <label className="text-red-300 flex gap-2">
-            <Image src={`/assets/ic_heroi.svg`} alt={""} width={10} height={10} />
+            <Image
+              src={`/assets/ic_heroi.svg`}
+              alt={""}
+              width={10}
+              height={10}
+            />
             Ordenar por nome - A-Z
             <input
               aria-labelledby="Ordenar heróis de a-z"
@@ -108,7 +69,7 @@ const HomePage = () => {
           </label>
 
           <button
-            className="flex items-center justify-center gap-4 hover:bg-red-50 py-3 text-red-300 rounded-full"
+            className="flex items-center justify-center gap-2 hover:border-b-red-200 hover:border-b py-3 text-red-300"
             onClick={handleShowOnlyFavorites}
           >
             <IconHeartFilled className="text-red-400 size-4" />
@@ -117,11 +78,21 @@ const HomePage = () => {
         </div>
       </div>
 
-      {!characters.length ? (
-        <p>Carregando...</p>
-      ) : (
-        <>
-          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 my-10 justify-center">
+      {error && (
+        <div className="bg-red-300 text-neutral-100">
+          {" "}
+          {error}{" "}
+          <button onClick={() => setError("")}>
+            <IconX />
+          </button>
+        </div>
+      )}
+
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 my-10 justify-center items-center min-h-[30dvh]">
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
             {characters.map((character: Character) => (
               <Card
                 onClick={handleToggleFavorite}
@@ -129,10 +100,9 @@ const HomePage = () => {
                 character={character}
               />
             ))}
-          </div>
-        </>
-      )}
-      <Footer />
+          </>
+        )}
+      </div>
     </main>
   );
 };

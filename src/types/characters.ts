@@ -8,28 +8,34 @@ export interface Character {
       extension: string
     },
     comics: {
-      items: Comics[]
+      available: number
+      items: CharacterComic[]
     },
     series: {
       available: number
     }
   }
 
-  interface Comics {
+  export interface CharacterComic {
     resourceURI: string,
     name: string
   }
 
-  export interface CharacterComics {
+  export interface Comic {
     id: number,
     title: string,
     resourceURI: string
   }
 
-  export interface CharacterComicsApiResponse {
-    results: CharacterComics[]
+  export interface Comics {
+    data: {
+      data: {
+        results: Comic[]
+      }
+    }
   }
   
-  export interface CharacterApiResponse {
+  export interface Characters {
     results: Character[]
+    comics: Comic[]
   }
