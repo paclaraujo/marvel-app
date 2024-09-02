@@ -27,6 +27,10 @@ export const getCharacters = async (): Promise<Characters> => {
   return data;
 };
 
+function convertToHttps(url: string): string {
+  return url.replace(/^http:\/\//i, 'https://');
+}
+
 export const getCharactersById = async (
   id: string
 ): Promise<Characters> => {
@@ -35,7 +39,7 @@ export const getCharactersById = async (
   } = await axios.get(`${MARVEL_BASE_API_URL}/characters/${id}?${query}`);
 
   const comics = await Promise.all(
-    data.results[0].comics.items.map((item: CharacterComic) => axios.get(`${item.resourceURI}?${query}`)
+    data.results[0].comics.items.map((item: CharacterComic) => axios.get(`${convertToHttps(item.resourceURI)}?${query}`)
     )
   ) as unknown as Comics[];
 
