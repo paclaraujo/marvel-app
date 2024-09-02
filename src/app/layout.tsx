@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} flex flex-col items-center bg-neutral-50 min-h-[100dvh] justify-between`}
+        className={`${inter.className} flex flex-col items-center bg-neutral-100 min-h-[100dvh] justify-between`}
       >
         <div>{children}</div>
         <Footer />

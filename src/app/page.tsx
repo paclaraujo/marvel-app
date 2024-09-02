@@ -26,12 +26,12 @@ const HomePage = () => {
   return (
     <main className="container px-8 flex flex-col items-center">
       <Header />
-      <div className="flex gap-6 bg-red-50 w-full md:w-[65dvw] rounded-full py-3 px-4 border border-red-100 placeholder:text-red-300">
-        <IconSearch className="text-red-400" />
+      <div className="bg-red-50 w-full md:w-[65dvw] rounded-full border border-red-100 relative">
+        <IconSearch className="text-red-400 absolute top-3 left-3" />
         <input
           aria-label="Pesquisar pelo nome do herói"
           type="text"
-          className="placeholder:text-red-300 bg-red-50 w-full"
+          className="placeholder:text-red-300 pl-12 bg-red-50 w-full md:w-[65dvw] rounded-full py-3 px-4"
           placeholder="Procure por heróis"
           onChange={(e) => handleFilterByName(e.target.value)}
         />

@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  IconHeartFilled,
-  IconSearch,
-  IconStar,
-  IconX,
-} from "@tabler/icons-react";
+import { IconHeartFilled, IconSearch } from "@tabler/icons-react";
 import Image from "next/image";
 import { useCharactersDetailsController } from "@/hooks/useCharactersDetailsController";
 import { Loader } from "@/components/Loader";
@@ -33,18 +28,26 @@ const CharacterDetailsPage = ({ params }: CharacterDetailsPageProps) => {
           width={200}
           height={250}
         />
-        <div className="flex gap-6 bg-white w-full md:w-[65dvw] rounded-full py-3 px-4 ">
-          <IconSearch className="text-red-400" />
+        <div className="bg-white w-full md:w-[65dvw] rounded-full border relative">
+          <IconSearch className="text-red-400 absolute top-3 left-3" />
           <input
             aria-label="Pesquisar pelo nome do herói"
             type="text"
-            className="placeholder:text-neutral-400 bg-white w-full"
+            className="placeholder:text-red-300 pl-12 bg-white w-full md:w-[65dvw] rounded-full py-3 px-4"
             placeholder="Procure por heróis"
           />
         </div>
       </header>
-      {error && <ErrorBadge error={error} setError={setError} />}
-      {isLoading && <Loader />}
+      {error && (
+        <div className="flex justify-center items-center">
+          <ErrorBadge error={error} setError={setError} />
+        </div>
+      )}
+      {isLoading && (
+        <div className="min-h-[30dvh] flex justify-center items-center">
+          <Loader />
+        </div>
+      )}
       {character.length > 0 && (
         <div className="flex flex-col gap-5 items-center mt-10">
           <div className="grid grid-cols-1 md:grid-cols-2 w-[70dvw] relative">
