@@ -37,7 +37,9 @@ export const getCharactersById = async (
   const comics = await Promise.all(
     data.results[0].comics.items.map((item: CharacterComic) => axios.get(`${item.resourceURI}?${query}`)
     )
-  ) as unknown as Comics;
+  ) as unknown as Comics[];
 
-  return { ...data, comics: { results: comics.data.data.results } };
+  const formattedComics = comics.map(comic => ({...comic.data.data.results[0]}) )
+
+  return { ...data, comics: formattedComics};
 };

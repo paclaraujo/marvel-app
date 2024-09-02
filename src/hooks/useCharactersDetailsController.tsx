@@ -15,10 +15,12 @@ const [isLoading, setIsLoading] = useState(false)
     setIsLoading(true)
     try {
       const { results, comics } = await getCharactersById(id);
+
       setCharacter(results);
+      console.log(comics)
       setComics(comics);
     } catch (e) {
-      setError("Erro ao carregar od heróis");
+      setError("Erro ao carregar o herói");
     }
     setIsLoading(false)
   }, [id]);

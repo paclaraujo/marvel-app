@@ -25,6 +25,10 @@ export interface Character {
     id: number,
     title: string,
     resourceURI: string
+    thumbnail: {
+      path: string,
+      extension: string
+    },
   }
 
   export interface Comics {

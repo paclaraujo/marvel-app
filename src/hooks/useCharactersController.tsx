@@ -17,7 +17,7 @@ export const useCharactersController = () => {
       setCharacters(results);
       setInitialCharacters(results);
     } catch (e) {
-      setError("Erro ao carregar od heróis");
+      setError("Erro ao carregar os heróis");
     }
     setIsLoading(false)
   }, []);
@@ -36,9 +36,9 @@ export const useCharactersController = () => {
     setCharacters(filteredByName);
   };
 
-  const handleOrderByName = (order: string) => {
+  const handleOrderByName = (order: boolean) => {
     const sortedCharacters = [...characters].sort((a, b) =>
-      order === "a-z"
+      order
         ? a.name.localeCompare(b.name)
         : b.name.localeCompare(a.name)
     );
